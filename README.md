@@ -5,7 +5,11 @@ This is a tiny openjudge system written in bash shell and C++, which is created 
 
 This is a readme file for Online Judge.
 
-#### show: 
+
+
+
+
+#### show:
 
 Commond 'show' will dIsplay a question list or the details of a question.
 
@@ -34,6 +38,10 @@ for example:
 ​	input:1 2
 
 ​    output:3
+
+
+
+
 
 
 

@@ -1,0 +1,1 @@
+cat /root/OpenJudge/Check/temp | /root/OpenJudge/Check/a.out >> /root/OpenJudge/Check/answer

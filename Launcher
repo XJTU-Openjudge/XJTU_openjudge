@@ -1,0 +1,41 @@
+# this script scan through the submit.txt file for submissions 
+# if found any,it will try to explain it 
+# if worked ,the result will be returned to the submitter 
+# else a fail infomation will be returned instead
+
+submitplace=/submit.txt
+testplace=./Submitsys/tst.txt
+scoreboard=./Submitsys/scoreboard.txt
+
+while :
+do	
+	if test -s $submitplace; then
+
+		touch $testplace
+				#call judge shell script
+		sbPLC=$(head -n 1 $submitplace| awk '{print $1}')
+		qstID=$(head -n 1 $submitplace| awk   '{print $2}')
+		userNM=$(head -n 1 $submitplace| awk  '{print $3}')
+	#	subTM=$(head -n 1 $submitplace| awk  '{print $4}')
+		
+		echo -e "\nYour Submission to question $qstID : \n" >> $testplace
+		./Judgesys/oj $sbPLC $qstID >> $testplace
+		
+		score=$(tail -n 1 $testplace| awk '{print}')
+		
+		#find if any submission exists
+			
+		# tot_score 
+		echo -e "$userNM  $(date)			$qstID				$score" >> $scoreboard  
+		
+		
+				
+		/root/OpenJudge/Submitsys/send $userNM $testplace
+		rm $testplace
+		
+		
+		# remove the first line of the file
+		sed -i '1d' $submitplace
+	else sleep 1s	
+	fi
+done

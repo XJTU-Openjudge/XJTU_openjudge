@@ -1,0 +1,3 @@
+rm scoreboard.txt
+touch scoreboard.txt
+

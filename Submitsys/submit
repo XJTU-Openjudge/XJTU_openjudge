@@ -1,0 +1,17 @@
+# argu1 = name of the question
+# argu2 = place of your own submission
+# this file writes your submission infomation to submit.txt file  
+
+submitplace=/submit.txt
+a=$1
+if [[ $1 != /* ]]; then
+	a=$(pwd)"/"$a
+fi
+
+if [ ! $2 ] 
+then
+	echo "Bad input!"
+else
+	echo $a' '$2' '${USER}' '$(date +%c) >>$submitplace
+fi
+

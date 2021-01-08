@@ -1,0 +1,8 @@
+tar=$1
+if [ -e  /Question/$tar ] 
+then 
+	cat /Question/$tar
+else
+	echo "sorry, can't find this question!"
+fi
+

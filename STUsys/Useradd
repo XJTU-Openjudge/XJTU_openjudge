@@ -1,0 +1,16 @@
+#! /bin/bash
+
+bak=$IFS
+IFS=$'\n'
+for var in $(more ./STU.list)
+do
+    if [ -n $var ]
+    then 
+        useradd -m "cs"$var
+        echo 
+        echo "Cs"$var | passwd --stdin "cs"$var
+        echo
+        echo "User"$var"is changed!"
+    fi
+done
+IFS=$bak

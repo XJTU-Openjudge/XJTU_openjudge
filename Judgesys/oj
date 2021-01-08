@@ -1,0 +1,85 @@
+#!/bin/bash
+#name is the path of the homework and tar is the name of the problem
+name=$1
+tar=$2
+folder="/root/OpenJudge/Check/"
+#check whether the target of the problem exist
+if [ -e /Question/$tar ]
+then
+	i=1	
+else
+	echo "Can't find this question!"
+	exit 0
+fi
+if [ -e $name ]
+then
+	i=1
+else
+	echo "Can't find this file"
+	exit 0
+fi
+#Complier
+cp $name $folder"Stu.cpp"
+name="/root/OpenJudge/Check/Stu.cpp"
+g++ $name >> /dev/null 2>&1
+if [ $? -ne 0 ]
+then
+		echo "Complier Error"
+		exit 0
+fi
+#prepare the test and the answer 
+mv ./a.out /root/OpenJudge/Check
+cp "/root/OpenJudge/Test/"$2 /root/OpenJudge/Check/tst
+cp "/root/OpenJudge/Standard/"$2 /root/OpenJudge/Check/stdans
+
+#get the test to the a.out and output the answer to a file
+touch /root/OpenJudge/Check/answer
+i=1
+cat /root/OpenJudge/Check/tst | while read var 
+do 
+	if [[ $var == "test"$i":" ]]; then
+		continue
+	else
+		touch /root/OpenJudge/Check/temp
+		echo $var >> /root/OpenJudge/Check/temp
+	fi
+	chk=$(($i+1))
+	if [[ $var == "test"$chk":" ]]; then
+		if [ -s /root/OpenJudge/Check/temp ]
+		then
+			str="answer""$i"":"
+			echo $str >> /root/OpenJudge/Check/answer
+			let i=i+1
+			timeout 1 /root/OpenJudge/Judgesys/getin 
+			if [ $? -ne 0 ]
+			then 
+				exit 1
+			fi
+		fi
+		rm /root/OpenJudge/Check/temp
+	fi
+done
+if [ $? -eq 1 ]
+then
+	echo "Timeout!"
+	rm $folder"answer"
+	rm $folder"Stu.cpp"
+	rm $folder"stdans"
+	rm $folder"tst"
+	rm $folder"a.out"
+	if [ -e /root/OpenJudge/Check/temp ]
+	then
+		rm $folder"temp"
+	fi
+	exit 0
+fi
+/root/OpenJudge/Judgesys/diff.out
+rm $folder"answer"
+rm $folder"Stu.cpp"
+rm $folder"stdans"
+rm $folder"tst"
+rm $folder"a.out"
+if [ -e /root/OpenJudge/Check/temp ]
+then
+	rm $folder"temp"
+fi

@@ -1,0 +1,4 @@
+for var in $(more STU.list)
+do
+	cp -p /root/OpenJudge/copyfile/README.txt /home/cs$var	
+done 
